@@ -7,26 +7,25 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
+#include <math.h>
 #include <stdlib.h>
 #include <GLUT/glut.h>
 
-void draw() {
-  glBegin(GL_TRIANGLES);
-  glColor3f(0.1, 0.2, 0.3);
-  glVertex3f(0, 0, 0);
-  glVertex3f(1, 0, 0);
-  glVertex3f(0, 1, 0);
+void getVertices() {
+  glBegin(GL_LINE_STRIP);
+  glVertex3f(-0.5, -0.5, 0);
+  glVertex3f(0.5, -0.5, 0);
+  glVertex3f(0.0, sqrt(0.75) - 0.5, 0);
+  glVertex3f(-0.5, -0.5, 0);
   glEnd();
 }
 
 void display()
 {
-  glClear( GL_COLOR_BUFFER_BIT );
-  draw();
+  glClear(GL_COLOR_BUFFER_BIT);
+  drawTriangle();
   glFlush();
 }
-
-//----------------------------------------------------------------------------
 
 void keyboard(unsigned char key, int x, int y)
 {
@@ -51,5 +50,4 @@ int main(int argc, char *argv[]) {
   glutDisplayFunc(display);
   glutKeyboardFunc(keyboard);
   glutMainLoop();
-  draw();
 }
