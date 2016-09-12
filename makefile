@@ -5,16 +5,16 @@
 # Date: 2016-09-11
 #
 
-CC = gcc
-TARGETS = main
+CC = clang
+TARGETS = main.exe
 
 all: $(TARGETS)
 
-main: main.o
-	$(CC) -o main.exe main.o -L"C:\MinGW\freeglut\lib" -lfreeglut -lopengl32 -Wl,--subsystem,windows -lstdc++
+main.exe: main.o
+	$(CC) -o main.exe main.o -lstdc++ -framework OpenGL -framework GLUT
 
 main.o: main.cpp
-	$(CC) -c main.cpp -I"C:\MinGW\freeglut\include"
+	$(CC) -c main.cpp
 
 clean:
-	rm -rf *.o main
+	rm -rf *.o main.exe
