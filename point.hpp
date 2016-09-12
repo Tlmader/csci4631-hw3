@@ -41,5 +41,9 @@ public:
    * Sets the y value of this Point.
    */
   void setY(float _y);
+
+private:
+  float x;
+  float y;
 };
 #endif
