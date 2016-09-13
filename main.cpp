@@ -14,6 +14,14 @@
 #include <vector>
 #include "point.hpp"
 
+/**
+ * Returns a point by a distance between two points.
+ *
+ * @param p1 a pointer to the start point
+ * @param p2 a pointer to the end point
+ * @param dist a double used for distance
+ * @return the point between p1 and p2
+ */
 Point* getPointByDistance(Point* p1, Point* p2, double dist) {
   Point* p = new Point();
   p->setX((p1->getX() * (1 - dist)) + (p2->getX() * dist));
@@ -22,7 +30,7 @@ Point* getPointByDistance(Point* p1, Point* p2, double dist) {
 }
 
 /**
- * Rotates a point around a pivot via translation to the origin.
+ * Returns a point rotated around a pivot via translation to the origin.
  *
  * @param p a pointer to the point to be rotated
  * @param pivot a pointer to the point used as the pivot
