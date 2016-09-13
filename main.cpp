@@ -15,38 +15,31 @@
 #include "point.hpp"
 
 /**
- * Gets a vertex for the Koch curve for two given points.
- *
- * @param p1 a pointer to a first point
- * @param p2 a pointer to a second point
- * @return the pointer to the vertex
- */
-Point* getKoch(Point* p1, Point* p2) {
-  // TODO: Math here
-}
-
-/**
- * Iteratively gets vertices for the Koch curve for two given points.
+ * Iteratively gets the Koch curve for two given points.
  *
  * @param iter the number of times to run
  * @param p1 a pointer to a first point
  * @param p2 a pointer to a second point
  * @return the vector of pointers to the vertices
  */
-std::vector<Point*> getVertices(int iter, Point* p1, Point* p2) {
+std::vector<Point*> getKochCurveWithIteration(int iter, Point* p1, Point* p2) {
   std::vector<Point*> currentVertices;
-  std::vector<Point*> kochVertices;
-  std::vector<Point*> tempVertices;
   currentVertices.push_back(p1);
   currentVertices.push_back(p2);
-  for (int i = 0; i < currentVertices.size() - 1; i++) {
-    kochVertices.push_back(getKoch(currentVertices[i], currentVertices[i + 1]));
-  }
-  for (int i = 0; i < currentVertices.size(); i++) {
-    tempVertices.push_back(currentVertices[i]);
-    if (i < currentVertices.size() - 1) {
-      tempVertices.push_back(kochVertices[i]);
+  for (int i = 0; i < iter; i++) {
+    std::vector<Point*> tempVertices;
+    for (int j = 0; j < currentVertices.size() - 1; j++) {
+      Point* p1 = currentVertices[j];
+      Point* p2 = new Point();
+      Point* p3 = new Point();
+      Point* p4 = new Point();
+      tempVertices.push_back(p1);
+      tempVertices.push_back(p2);
+      tempVertices.push_back(p3);
+      tempVertices.push_back(p4);
     }
+    tempVertices.push_back(currentVertices[currentVertices.size() - 1]);
+    currentVertices = tempVertices;
   }
   return currentVertices;
 }
@@ -71,9 +64,9 @@ void draw(std::vector<Point*> vertices) {
  */
 void display()
 {
-  draw(getVertices(3, new Point(-0.5, -0.5), new Point(0.5, -0.5)));
-  draw(getVertices(3, new Point(0.5, -0.5), new Point(0.0, sqrt(0.75) - 0.5)));
-  draw(getVertices(3, new Point(0.0, sqrt(0.75) - 0.5), new Point(-0.5, -0.5)));
+  draw(getKochCurveWithIteration(3, new Point(-0.5, -0.5), new Point(0.5, -0.5)));
+  draw(getKochCurveWithIteration(3, new Point(0.5, -0.5), new Point(0.0, sqrt(0.75) - 0.5)));
+  draw(getKochCurveWithIteration(3, new Point(0.0, sqrt(0.75) - 0.5), new Point(-0.5, -0.5)));
 }
 
 void keyboard(unsigned char key, int x, int y)
