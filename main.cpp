@@ -14,6 +14,13 @@
 #include <vector>
 #include "point.hpp"
 
+Point* getPointByDistance(Point* p1, Point* p2, double dist) {
+  Point* p = new Point();
+  p->setX((p1->getX() * (1 - dist)) + (p2->getX() * dist));
+  p->setY((p1->getY() * (1 - dist)) + (p2->getY() * dist));
+  return p;
+}
+
 /**
  * Rotates a point around a pivot via translation to the origin.
  *
@@ -22,11 +29,13 @@
  * @param angle a double for determining rotation
  * @return the pointer to the rotated point
  */
-Point* getRotatedPoint(Point* p, Point* pivot, double angle) {
+Point* getPointByRotation(Point* p, Point* pivot, double angle) {
   p->setX(p->getX() - pivot->getX());
   p->setY(p->getY() - pivot->getY());
-  p->setX(p->getX() * cos(angle) - (p->getY() * sin(angle)) + pivot->getX());
-  p->setY(p->getX() * sin(angle) + (p->getY() * cos(angle)) + pivot->getY());
+  p->setX((p->getX() * cos(angle)) - (p->getY() * sin(angle)));
+  p->setY((p->getX() * sin(angle)) + (p->getY() * cos(angle)));
+  p->setX(p->getX() + pivot->getX());
+  p->setY(p->getY() + pivot->getY());
   return p;
 }
 
@@ -47,12 +56,12 @@ std::vector<Point*> getKochCurveWithIteration(int iter, Point* p1, Point* p2) {
     for (int j = 0; j < currentVertices.size() - 1; j++) {
       Point* p1 = currentVertices[j];
       Point* p5 = currentVertices[j + 1];
-      Point* p2 = new Point((p1->getX() * 2 / 3) + (p5->getX() / 3), (p1->getY() * 2 / 3) + (p5->getY() / 3)); // 1/3 of distance
-      Point* p4 = new Point((p1->getX() / 3) + (p5->getX() * 2 / 3), (p1->getY() / 3) + (p5->getY() * 2 / 3)); // 2/3 of distance
-      Point* p3 = getRotatedPoint(p2, p4, -60);
+      Point* p2 = getPointByDistance(p1, p5, 1 / 3); // 1/3 of distance
+      Point* p4 = getPointByDistance(p1, p5, 2 / 3); // 2/3 of distance
+      //Point* p3 = getPointByRotation(p4, p2, -60);
       tempVertices.push_back(p1);
       tempVertices.push_back(p2);
-      tempVertices.push_back(p3);
+      //tempVertices.push_back(p3);
       tempVertices.push_back(p4);
     }
     tempVertices.push_back(currentVertices[currentVertices.size() - 1]);
@@ -68,12 +77,10 @@ std::vector<Point*> getKochCurveWithIteration(int iter, Point* p1, Point* p2) {
 */
 void draw(std::vector<Point*> vertices) {
   glBegin(GL_LINE_STRIP);
-  glClear(GL_COLOR_BUFFER_BIT);
   for (int i = 0; i < vertices.size(); i++) {
     glVertex2f(vertices[i]->getX(), vertices[i]->getY());
   }
   glEnd();
-  glFlush();
 }
 
 /**
@@ -81,9 +88,11 @@ void draw(std::vector<Point*> vertices) {
  */
 void display()
 {
-  draw(getKochCurveWithIteration(3, new Point(-0.5, -0.5), new Point(0.5, -0.5)));
-  draw(getKochCurveWithIteration(3, new Point(0.5, -0.5), new Point(0.0, sqrt(0.75) - 0.5)));
-  draw(getKochCurveWithIteration(3, new Point(0.0, sqrt(0.75) - 0.5), new Point(-0.5, -0.5)));
+  glClear(GL_COLOR_BUFFER_BIT);
+  draw(getKochCurveWithIteration(1, new Point(-0.5, -0.5), new Point(0.5, -0.5)));
+  draw(getKochCurveWithIteration(1, new Point(0.5, -0.5), new Point(0.0, sqrt(0.75) - 0.5)));
+  draw(getKochCurveWithIteration(1, new Point(0.0, sqrt(0.75) - 0.5), new Point(-0.5, -0.5)));
+  glFlush();
 }
 
 void keyboard(unsigned char key, int x, int y)

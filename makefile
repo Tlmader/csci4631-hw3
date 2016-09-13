@@ -10,8 +10,11 @@ TARGETS = main.exe
 
 all: $(TARGETS)
 
-main.exe: main.o
-	$(CC) -o main.exe main.o -lstdc++ -framework OpenGL -framework GLUT
+main.exe: point.o main.o
+	$(CC) -o main.exe point.o main.o -lstdc++ -framework OpenGL -framework GLUT
+
+point.o: point.cpp
+	$(CC) -c point.cpp
 
 main.o: main.cpp
 	$(CC) -c main.cpp
