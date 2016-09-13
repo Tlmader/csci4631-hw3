@@ -14,11 +14,26 @@
 #include <vector>
 #include "point.hpp"
 
+/**
+ * Gets a vertex for the Koch curve for two given points.
+ *
+ * @param p1 a pointer to a first point
+ * @param p2 a pointer to a second point
+ * @return the pointer to the vertex
+ */
 Point* getKoch(Point* p1, Point* p2) {
   // TODO: Math here
 }
 
-void getVertices(int iter, Point* p1, Point* p2) {
+/**
+ * Iteratively gets vertices for the Koch curve for two given points.
+ *
+ * @param iter the number of times to run
+ * @param p1 a pointer to a first point
+ * @param p2 a pointer to a second point
+ * @return the vector of pointers to the vertices
+ */
+std::vector<Point*> getVertices(int iter, Point* p1, Point* p2) {
   std::vector<Point*> currentVertices;
   std::vector<Point*> kochVertices;
   std::vector<Point*> tempVertices;
@@ -33,17 +48,32 @@ void getVertices(int iter, Point* p1, Point* p2) {
       tempVertices.push_back(kochVertices[i]);
     }
   }
-  glEnd();
+  return currentVertices;
 }
 
-void display()
-{
+/**
+* Draws a line strip based on given vertices.
+*
+* @param vertices a vector of pointers to vertices
+*/
+void draw(std::vector<Point*> vertices) {
   glBegin(GL_LINE_STRIP);
   glClear(GL_COLOR_BUFFER_BIT);
-  getVertices(3, new Point(-0.5, -0.5), new Point(0.5, -0.5));
-  // glVertex3f(0.0, sqrt(0.75) - 0.5, 0);
-  // glVertex3f(-0.5, -0.5, 0);
+  for (int i = 0; i < vertices.size(); i++) {
+    glVertex2f(vertices[i]->getX(), vertices[i]->getY());
+  }
+  glEnd();
   glFlush();
+}
+
+/**
+ * Passed to glutDisplayFunc() as the display callback function.
+ */
+void display()
+{
+  draw(getVertices(3, new Point(-0.5, -0.5), new Point(0.5, -0.5)));
+  draw(getVertices(3, new Point(0.5, -0.5), new Point(0.0, sqrt(0.75) - 0.5)));
+  draw(getVertices(3, new Point(0.0, sqrt(0.75) - 0.5), new Point(-0.5, -0.5)));
 }
 
 void keyboard(unsigned char key, int x, int y)
