@@ -15,6 +15,22 @@
 #include "point.hpp"
 
 /**
+ * Rotates a point around a pivot via translation to the origin.
+ *
+ * @param p a pointer to the point to be rotated
+ * @param pivot a pointer to the point used as the pivot
+ * @param angle a double for determining rotation
+ * @return the pointer to the rotated point
+ */
+Point* getRotatedPoint(Point* p, Point* pivot, double angle) {
+  p->setX(p->getX() - pivot->getX());
+  p->setY(p->getY() - pivot->getY());
+  p->setX(p->getX() * cos(angle) - (p->getY() * sin(angle)) + pivot->getX());
+  p->setY(p->getX() * sin(angle) + (p->getY() * cos(angle)) + pivot->getY());
+  return p;
+}
+
+/**
  * Iteratively gets the Koch curve for two given points.
  *
  * @param iter the number of times to run
@@ -30,9 +46,10 @@ std::vector<Point*> getKochCurveWithIteration(int iter, Point* p1, Point* p2) {
     std::vector<Point*> tempVertices;
     for (int j = 0; j < currentVertices.size() - 1; j++) {
       Point* p1 = currentVertices[j];
-      Point* p2 = new Point();
-      Point* p3 = new Point();
-      Point* p4 = new Point();
+      Point* p5 = currentVertices[j + 1];
+      Point* p2 = new Point((p1->getX() * 2 / 3) + (p5->getX() / 3), (p1->getY() * 2 / 3) + (p5->getY() / 3)); // 1/3 of distance
+      Point* p4 = new Point((p1->getX() / 3) + (p5->getX() * 2 / 3), (p1->getY() / 3) + (p5->getY() * 2 / 3)); // 2/3 of distance
+      Point* p3 = getRotatedPoint(p2, p4, -60);
       tempVertices.push_back(p1);
       tempVertices.push_back(p2);
       tempVertices.push_back(p3);
