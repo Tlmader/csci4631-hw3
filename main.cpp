@@ -17,8 +17,8 @@
 /**
  * Returns a point by a distance between two points.
  *
- * @param p1 a pointer to the start point
- * @param p2 a pointer to the end point
+ * @param p1 a start point
+ * @param p2 an end point
  * @param dist a double used for distance
  * @return the point between p1 and p2
  */
@@ -26,18 +26,16 @@ Point* getPointByDistance(Point* p1, Point* p2, double dist) {
   Point* p = new Point();
   p->setX((p1->getX() * (1.0 - dist)) + (p2->getX() * dist));
   p->setY((p1->getY() * (1.0 - dist)) + (p2->getY() * dist));
-  std::cout << p->getX() << std::endl;
-  std::cout << p->getY() << std::endl;
   return p;
 }
 
 /**
  * Returns a point rotated around a pivot via translation to the origin.
  *
- * @param point a pointer to the point to be rotated
- * @param pivot a pointer to the point used as the pivot
+ * @param point a point to be rotated
+ * @param pivot a point used as the pivot
  * @param angle a double for determining rotation
- * @return the pointer to the rotated point
+ * @return the rotated point
  */
 Point* getPointByRotation(Point* point, Point* pivot, double angle) {
   Point* temp = new Point();
@@ -55,9 +53,9 @@ Point* getPointByRotation(Point* point, Point* pivot, double angle) {
  * Iteratively gets the Koch curve for two given points.
  *
  * @param iter the number of times to run
- * @param p1 a pointer to a first point
- * @param p2 a pointer to a second point
- * @return the vector of pointers to the vertices
+ * @param p1 a start point
+ * @param p2 an end point
+ * @return the vector of vertices
  */
 std::vector<Point*> getKochCurveWithIteration(int iter, Point* p1, Point* p2) {
   std::vector<Point*> currentVertices;
@@ -101,12 +99,19 @@ void draw(std::vector<Point*> vertices) {
 void display()
 {
   glClear(GL_COLOR_BUFFER_BIT);
-  draw(getKochCurveWithIteration(1, new Point(-0.5, -0.5), new Point(0.5, -0.5)));
-  draw(getKochCurveWithIteration(1, new Point(0.5, -0.5), new Point(0.0, sqrt(0.75) - 0.5)));
-  draw(getKochCurveWithIteration(1, new Point(0.0, sqrt(0.75) - 0.5), new Point(-0.5, -0.5)));
+  draw(getKochCurveWithIteration(10, new Point(-0.5, -0.5), new Point(0.5, -0.5)));
+  draw(getKochCurveWithIteration(10, new Point(0.5, -0.5), new Point(0.0, sqrt(0.75) - 0.5)));
+  draw(getKochCurveWithIteration(10, new Point(0.0, sqrt(0.75) - 0.5), new Point(-0.5, -0.5)));
   glFlush();
 }
 
+/**
+ * Passed to glutKeyboardFunc() as the keyboard callback.
+ *
+ * @param key the input received via keystroke
+ * @param x the x-coordinate of the mouse location
+ * @param y the y-coordinate of the mouse location
+ */
 void keyboard(unsigned char key, int x, int y)
 {
   switch (key) {
