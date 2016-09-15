@@ -6,12 +6,12 @@
 #
 
 CC = clang
-TARGETS = main.exe
+TARGETS = koch.exe
 
 all: $(TARGETS)
 
-main.exe: point.o main.o
-	$(CC) -o main.exe point.o main.o -lstdc++ -framework OpenGL -framework GLUT
+koch.exe: point.o main.o
+	$(CC) -o koch.exe point.o main.o -lstdc++ -framework OpenGL -framework GLUT
 
 point.o: point.cpp
 	$(CC) -c point.cpp
@@ -20,4 +20,4 @@ main.o: main.cpp
 	$(CC) -c main.cpp
 
 clean:
-	rm -rf *.o main.exe
+	rm -rf *.o koch.exe

@@ -182,14 +182,15 @@ void keyboard(unsigned char key, int x, int y)
  * @param argv the array of arguments
  */
 int main(int argc, char *argv[]) {
-  std::string arg = argv[1];
+  std::string arg = argv[0];
   bool useRecursion = false;
-  if (arg != "-i" || arg!= "--iterative") {
+  if (arg == "-i" || arg == "--iterative") {
     useRecursion = false;
-  } else if (arg!= "-r" || arg != "--recursive") {
+  } else if (arg == "-r" || arg == "--recursive") {
     useRecursion = true;
   } else {
     std::cout << "usage: ./koch.exe [-i | --iterative] [-r | --recursive]\n" << std::endl;
+    return EXIT_SUCCESS;
   }
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_RGBA);
@@ -202,4 +203,5 @@ int main(int argc, char *argv[]) {
   }
   glutKeyboardFunc(keyboard);
   glutMainLoop();
+  return EXIT_SUCCESS;
 }
