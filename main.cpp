@@ -150,9 +150,6 @@ void displayWithIteration()
 void displayWithRecursion()
 {
   glClear(GL_COLOR_BUFFER_BIT);
-  // draw(getKochCurveWithIteration(5, new Point(-0.5, -0.5), new Point(0.5, -0.5)));
-  // draw(getKochCurveWithIteration(5, new Point(0.5, -0.5), new Point(0.0, sqrt(0.75) - 0.5)));
-  // draw(getKochCurveWithIteration(5, new Point(0.0, sqrt(0.75) - 0.5), new Point(-0.5, -0.5)));
   draw(getKochCurveWithRecursion(5, new Point(-0.5, -0.5), new Point(0.5, -0.5)));
   draw(getKochCurveWithRecursion(5, new Point(0.5, -0.5), new Point(0.0, sqrt(0.75) - 0.5)));
   draw(getKochCurveWithRecursion(5, new Point(0.0, sqrt(0.75) - 0.5), new Point(-0.5, -0.5)));
@@ -175,6 +172,10 @@ void keyboard(unsigned char key, int x, int y)
   }
 }
 
+void printUsage() {
+  std::cout << "usage: ./koch.exe [-i | --iterative] [-r | --recursive]\n" << std::endl;
+}
+
 /**
  * Called at program startup.
  *
@@ -182,14 +183,18 @@ void keyboard(unsigned char key, int x, int y)
  * @param argv the array of arguments
  */
 int main(int argc, char *argv[]) {
-  std::string arg = argv[0];
+  if (argc < 2) {
+    printUsage();
+    return EXIT_SUCCESS;
+  }
+  std::string arg = argv[1];
   bool useRecursion = false;
   if (arg == "-i" || arg == "--iterative") {
     useRecursion = false;
   } else if (arg == "-r" || arg == "--recursive") {
     useRecursion = true;
   } else {
-    std::cout << "usage: ./koch.exe [-i | --iterative] [-r | --recursive]\n" << std::endl;
+    printUsage();
     return EXIT_SUCCESS;
   }
   glutInit(&argc, argv);
