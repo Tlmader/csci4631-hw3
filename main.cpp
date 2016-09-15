@@ -1,5 +1,5 @@
 /**
- * Contains the main function.
+ * Contains the main function and program logic for drawing a Koch Snowflake.
  * @author Ted Mader
  * @date 2016-09-11
  */
@@ -81,6 +81,45 @@ std::vector<Point*> getKochCurveWithIteration(int iter, Point* p1, Point* p2) {
 }
 
 /**
+ * Recursively gets the Koch curve for two given points.
+ *
+ * @param iter the number of times to run
+ * @param p1 a start point
+ * @param p2 an end point
+ * @param vertices a vector of vertices
+ * @return the updated vector of vertices
+ */
+std::vector<Point*> getKochCurveWithRecursion(int iter, Point* p1, Point* p5, std::vector<Point*> vertices) {
+  if (iter == 0) {
+    vertices.push_back(p1);
+    vertices.push_back(p5);
+  } else {
+    iter--;
+    Point* p2 = getPointByDistance(p1, p5, 1.0 / 3.0);
+    Point* p4 = getPointByDistance(p1, p5, 2.0 / 3.0);
+    Point* p3 = getPointByRotation(p4, p2, -60 * (M_PI / 180));
+    vertices = getKochCurveWithRecursion(iter, p1, p2, vertices);
+    vertices = getKochCurveWithRecursion(iter, p2, p3, vertices);
+    vertices = getKochCurveWithRecursion(iter, p3, p4, vertices);
+    vertices = getKochCurveWithRecursion(iter, p4, p5, vertices);
+  }
+  return vertices;
+}
+
+/**
+ * Begins the recursive process for getting the Koch curve for two given points.
+ *
+ * @param iter the number of times to run
+ * @param p1 a start point
+ * @param p2 an end point
+ * @return the vector of vertices
+ */
+std::vector<Point*> getKochCurveWithRecursion(int iter, Point* p1, Point* p2) {
+  std::vector<Point*> vertices;
+  return getKochCurveWithRecursion(iter, p1, p2, vertices);
+}
+
+/**
 * Draws a line strip based on given vertices.
 *
 * @param vertices a vector of pointers to vertices
@@ -96,12 +135,27 @@ void draw(std::vector<Point*> vertices) {
 /**
  * Passed to glutDisplayFunc() as the display callback function.
  */
-void display()
+void displayWithIteration()
 {
   glClear(GL_COLOR_BUFFER_BIT);
-  draw(getKochCurveWithIteration(10, new Point(-0.5, -0.5), new Point(0.5, -0.5)));
-  draw(getKochCurveWithIteration(10, new Point(0.5, -0.5), new Point(0.0, sqrt(0.75) - 0.5)));
-  draw(getKochCurveWithIteration(10, new Point(0.0, sqrt(0.75) - 0.5), new Point(-0.5, -0.5)));
+  draw(getKochCurveWithIteration(5, new Point(-0.5, -0.5), new Point(0.5, -0.5)));
+  draw(getKochCurveWithIteration(5, new Point(0.5, -0.5), new Point(0.0, sqrt(0.75) - 0.5)));
+  draw(getKochCurveWithIteration(5, new Point(0.0, sqrt(0.75) - 0.5), new Point(-0.5, -0.5)));
+  glFlush();
+}
+
+/**
+ * Passed to glutDisplayFunc() as the display callback function.
+ */
+void displayWithRecursion()
+{
+  glClear(GL_COLOR_BUFFER_BIT);
+  // draw(getKochCurveWithIteration(5, new Point(-0.5, -0.5), new Point(0.5, -0.5)));
+  // draw(getKochCurveWithIteration(5, new Point(0.5, -0.5), new Point(0.0, sqrt(0.75) - 0.5)));
+  // draw(getKochCurveWithIteration(5, new Point(0.0, sqrt(0.75) - 0.5), new Point(-0.5, -0.5)));
+  draw(getKochCurveWithRecursion(5, new Point(-0.5, -0.5), new Point(0.5, -0.5)));
+  draw(getKochCurveWithRecursion(5, new Point(0.5, -0.5), new Point(0.0, sqrt(0.75) - 0.5)));
+  draw(getKochCurveWithRecursion(5, new Point(0.0, sqrt(0.75) - 0.5), new Point(-0.5, -0.5)));
   glFlush();
 }
 
@@ -122,17 +176,30 @@ void keyboard(unsigned char key, int x, int y)
 }
 
 /**
- * Called at program startup
+ * Called at program startup.
  *
  * @param argc the number of arguments
  * @param argv the array of arguments
  */
 int main(int argc, char *argv[]) {
+  std::string arg = argv[1];
+  bool useRecursion = false;
+  if (arg != "-i" || arg!= "--iterative") {
+    useRecursion = false;
+  } else if (arg!= "-r" || arg != "--recursive") {
+    useRecursion = true;
+  } else {
+    std::cout << "usage: ./koch.exe [-i | --iterative] [-r | --recursive]\n" << std::endl;
+  }
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_RGBA);
   glutInitWindowSize(512, 512);
   glutCreateWindow("csci4631-hw3");
-  glutDisplayFunc(display);
+  if (useRecursion) {
+    glutDisplayFunc(displayWithIteration);
+  } else {
+    glutDisplayFunc(displayWithRecursion);
+  }
   glutKeyboardFunc(keyboard);
   glutMainLoop();
 }
