@@ -1,10 +1,10 @@
-#include "point.hpp"
-
 /**
  * Implements functions for Points.
  * @author Ted Mader
  * @date 2016-09-12
  */
+
+#include "point.hpp"
 
 Point::Point() {
   x = 0;
