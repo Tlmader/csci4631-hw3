@@ -1,11 +1,12 @@
-#ifndef POINT_H
-#define POINT_H
-
 /**
  * Contains function declarations for a Point.
  * @author Ted Mader
  * @date 2016-09-12
  */
+
+#ifndef POINT_H
+#define POINT_H
+
 class Point {
 
 public:
