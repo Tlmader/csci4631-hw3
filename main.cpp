@@ -7,11 +7,13 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
-#include <GLUT/glut.h>
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include <iostream>
+#include <vector>
 #include <math.h>
 #include <stdlib.h>
-#include <vector>
+#include <GL/glut.h>
 #include "point.hpp"
 
 /**
